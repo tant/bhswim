@@ -1,0 +1,66 @@
+---
+// src/components/common/Footer.astro
+
+// Dữ liệu cho các cột link, dễ dàng quản lý
+const footerLinks = {
+  'Sản Phẩm': [
+    { href: '/courses', text: 'Các Khoá Học' },
+    { href: '/schedule', text: 'Lịch Học' },
+    { href: '/pricing', text: 'Bảng Giá' },
+    { href: '/private-coaching', text: 'Huấn Luyện Viên Riêng' },
+  ],
+  'Về BHSwim': [
+    { href: '/about', text: 'Câu Chuyện' },
+    { href: '/team', text: 'Đội Ngũ' },
+    { href: '/careers', text: 'Tuyển Dụng' },
+    { href: '/blog', text: 'Blog' },
+  ],
+  'Hỗ Trợ': [
+    { href: '/contact', text: 'Liên Hệ' },
+    { href: '/faq', text: 'Câu Hỏi Thường Gặp' },
+    { href: '/terms', text: 'Điều Khoản Dịch Vụ' },
+    { href: '/privacy', text: 'Chính Sách Bảo Mật' },
+  ],
+};
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-neutral-900 text-white">
+  <div class="container mx-auto px-6 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+      <!-- Cột Logo và Giới thiệu -->
+      <div class="md:col-span-2 lg:col-span-1">
+        <a href="/" class="text-3xl font-bold text-blue-500 hover:text-blue-400 transition-colors">
+          BHSwim
+        </a>
+        <p class="mt-4 text-neutral-400 max-w-xs">
+          Trung tâm dạy bơi chuyên nghiệp cho mọi lứa tuổi. Sứ mệnh của chúng tôi là lan toả niềm đam mê bơi lội và kỹ năng an toàn dưới nước.
+        </p>
+      </div>
+
+      <!-- Cột Links -->
+      {Object.entries(footerLinks).map(([title, links]) => (
+        <div>
+          <h3 class="text-lg font-semibold text-white uppercase tracking-wider">{title}</h3>
+          <ul class="mt-4 space-y-3">
+            {links.map((link: { href: string; text: string }) => (
+              <li>
+                <a href={link.href} class="text-neutral-400 hover:text-white hover:underline transition-colors">
+                  {link.text}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <!-- Dải phân cách và Mạng xã hội -->
+    <div class="mt-16 pt-8 border-t border-neutral-800 flex flex-col sm:flex-row items-center justify-between">
+      <p class="text-neutral-500 text-sm">
+        &copy; {currentYear} BHSwim. Đã đăng ký bản quyền.
+      </p>
+    </div>
+  </div>
+</footer>

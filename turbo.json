@@ -1,9 +1,14 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
+    "apps/backend#build": {
+      "outputs": ["apps/backend/.medusa/**/*"]
+    },
+    "apps/frontend#build": {
+      "outputs": ["apps/frontend/dist/**"]
+    },
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "dependsOn": ["^build"]
     },
     "dev": {
       "cache": false,

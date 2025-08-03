@@ -1,0 +1,129 @@
+---
+// src/components/common/Header.astro
+
+// Định nghĩa các link điều hướng để dễ dàng quản lý
+const navLinks = [
+  { href: '/', text: 'Trang Chủ' },
+  { href: '/products', text: 'Sản Phẩm' },
+  { href: '/about', text: 'Về Chúng Tôi' },
+  { href: '/contact', text: 'Liên Hệ' },
+];
+
+const { pathname } = Astro.url;
+---
+
+<header id="main-header" class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+  <div class="container mx-auto px-4">
+    <nav class="flex items-center justify-between h-20">
+      <!-- Logo -->
+      <a href="/" class="text-2xl font-bold text-blue-600 hover:text-blue-800 transition-colors">
+        BHSwim
+      </a>
+
+      <!-- Navigation Links - Desktop -->
+      <ul class="hidden md:flex items-center gap-6">
+        {navLinks.map(link => (
+          <li>
+            <a
+              href={link.href}
+              class:list={[
+                "text-base font-medium pb-1 border-b-2 transition-colors",
+                {
+                  'border-blue-600 text-blue-600': pathname === link.href,
+                  'border-transparent text-neutral-600 hover:text-blue-600': pathname !== link.href
+                }
+              ]}
+            >
+              {link.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <!-- Call to Action Button - Desktop -->
+      <a href="/register" class="hidden md:inline-block bg-blue-600 text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-blue-700 transition-transform hover:scale-105">
+        Đăng Ký Học
+      </a>
+
+      <!-- Hamburger Menu Button - Mobile -->
+      <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-neutral-700 hover:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500" aria-label="Mở menu" aria-expanded="false" aria-controls="mobile-menu">
+        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Mobile Menu - Hidden by default -->
+  <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-white shadow-lg">
+    <ul class="flex flex-col items-center gap-4 p-6">
+      {navLinks.map(link => (
+        <li>
+          <a href={link.href} class:list={[
+            "text-lg font-medium",
+            {
+              'text-blue-600': pathname === link.href,
+              'text-neutral-700 hover:text-blue-600': pathname !== link.href
+            }
+          ]}>
+            {link.text}
+          </a>
+        </li>
+      ))}
+      <li>
+        <a href="/register" class="mt-4 w-full text-center bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+          Đăng Ký Học
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  // src/components/common/Header.astro
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (mobileMenuButton && mobileMenu) {
+      mobileMenuButton.addEventListener('click', () => {
+        const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
+        mobileMenu.classList.toggle('hidden');
+        mobileMenuButton.setAttribute('aria-expanded', String(!isExpanded));
+
+        // Optional: Prevent body scroll when menu is open
+        if (!isExpanded) {
+          document.body.style.overflow = 'hidden';
+        } else {
+          document.body.style.overflow = '';
+        }
+      });
+    }
+
+    // Close menu if user clicks outside of it
+    document.addEventListener('click', (event) => {
+      const header = document.getElementById('main-header');
+      if (header && !header.contains(event.target as Node)) {
+        const isExpanded = mobileMenuButton?.getAttribute('aria-expanded') === 'true';
+        if (isExpanded) {
+          mobileMenu?.classList.add('hidden');
+          mobileMenuButton?.setAttribute('aria-expanded', 'false');
+          document.body.style.overflow = '';
+        }
+      }
+    });
+  });
+</script>
+
+<style>
+  /* A little bit of CSS for smooth transition on mobile menu */
+  #mobile-menu {
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+  }
+  #mobile-menu.hidden {
+    transform: translateY(-10px);
+    opacity: 0;
+    pointer-events: none;
+  }
+</style>

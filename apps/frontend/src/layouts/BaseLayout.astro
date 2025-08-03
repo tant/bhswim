@@ -1,0 +1,84 @@
+---
+// Import các thành phần cần thiết
+import Header from '../components/common/Header.astro';
+import Footer from '../components/common/Footer.astro';
+import '../styles/global.css';
+
+// Định nghĩa các props mà layout này sẽ nhận từ các trang
+export interface Props {
+	title: string;
+	description: string;
+	image?: string; // Dùng cho social sharing meta tags
+}
+
+const {
+	title,
+	description,
+	image = '/default-social-image.jpg', // Một ảnh mặc định cho social media
+} = Astro.props;
+
+// Lấy URL đầy đủ của trang hiện tại để dùng cho canonical link và social tags
+const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astro.url.pathname;
+---
+
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+	<head>
+		<!-- Meta tags cơ bản -->
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="generator" content={Astro.generator} />
+
+		<!-- SEO Meta Tags -->
+		<title>{title} | BHSwim</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonicalURL} />
+
+		<!-- Favicon -->
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={Astro.url} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={new URL(image, Astro.url)} />
+        <meta property="og:site_name" content="BHSwim" />
+
+		<!-- Twitter Card -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:url" content={Astro.url} />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={new URL(image, Astro.url)} />
+
+		<!-- Fonts (Ví dụ: Google Fonts) -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
+			rel="stylesheet"
+		/>
+
+		<!-- Slot để chèn các thẻ tùy chỉnh vào <head> từ các trang con -->
+		<slot name="head" />
+		
+		<!-- Flowbite JS -->
+		<script is:inline src="/flowbite.min.js"></script>
+	</head>
+	<body class="bg-neutral-50 text-neutral-900 antialiased">
+		<Header />
+		<main id="main-content" class="min-h-screen">
+			<!-- Slot chính để chèn nội dung của trang con -->
+			<slot />
+		</main>
+		<Footer />
+		<style is:global>
+			/* Thêm một vài style global ở đây nếu cần */
+			h1, h2, h3 {
+				font-weight: 800;
+			}
+		</style>
+	</body>
+</html>
